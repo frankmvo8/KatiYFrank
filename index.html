@@ -15,9 +15,9 @@
     
     <style>
         :root {
-            --primary-color: #fa8072;
-            --secondary-color: #001f3f;
-            --accent-color: #ffe4e1;
+            --primary-color: #c9962b;
+            --secondary-color: #1a2744;
+            --accent-color: #f5ebd6;
             --text-dark: #2c2c2c;
             --text-light: #fff;
         }
@@ -48,7 +48,7 @@
         .hero-banner {
             position: relative;
             height: 100vh;
-            background: linear-gradient(135deg, rgba(250, 128, 114, 0.9), rgba(0, 31, 63, 0.8)), 
+            background: linear-gradient(135deg, rgba(26, 39, 68, 0.92), rgba(26, 39, 68, 0.75) 50%, rgba(201, 150, 43, 0.75)),
                         url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80');
             background-size: cover;
             background-position: center;
@@ -132,10 +132,10 @@
             height: 100px;
             margin: 1.5rem auto;
             opacity: 0.95;
-            box-shadow: 
+            box-shadow:
                 0 6px 20px rgba(0, 0, 0, 0.15),
                 inset 0 0 15px rgba(255, 255, 255, 0.15),
-                0 0 0 2px rgba(250, 128, 114, 0.3);
+                0 0 0 2px rgba(201, 150, 43, 0.4);
         }
 
         /* Logo Monogram - Visible */
@@ -254,6 +254,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             min-width: 120px;
             transition: transform 0.3s ease;
+            border-top: 4px solid var(--secondary-color);
         }
 
         .countdown-box:hover {
@@ -289,6 +290,7 @@
             display: flex;
             flex-direction: column;
             min-height: 400px;
+            border-top: 5px solid var(--secondary-color);
         }
 
         .calendar-header {
@@ -348,7 +350,7 @@
             color: white;
             font-weight: bold;
             font-size: 1rem;
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 5px 15px rgba(201, 150, 43, 0.45);
             animation: pulse 2s infinite;
         }
 
@@ -364,6 +366,7 @@
             flex-direction: column;
             justify-content: center;
             min-height: 400px;
+            border-top: 5px solid var(--secondary-color);
         }
 
         .event-icon {
@@ -441,6 +444,7 @@
             text-align: center;
             box-shadow: 0 15px 40px rgba(0,0,0,0.1);
             transition: all 0.4s ease;
+            border-top: 5px solid var(--secondary-color);
         }
 
         .dress-card:hover {
@@ -501,6 +505,7 @@
             border-radius: 20px;
             box-shadow: 0 15px 50px rgba(0,0,0,0.1);
             overflow: hidden;
+            border-top: 5px solid var(--secondary-color);
         }
 
         .location-content {
@@ -542,6 +547,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            border-top: 5px solid var(--secondary-color);
         }
 
         .gift-card:hover {
@@ -587,7 +593,7 @@
 
         .gift-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 10px 30px rgba(201, 150, 43, 0.45);
             color: white;
         }
 
@@ -612,7 +618,7 @@
 
         .map-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 10px 30px rgba(201, 150, 43, 0.45);
             color: white;
         }
 
@@ -918,28 +924,28 @@
     </section>
 
     <!-- Parents Section -->
-    <section class="section" style="background: white; padding: 60px 0;">
+    <section class="section" style="background: var(--secondary-color); padding: 80px 0; color: white;">
         <div class="container">
-            <h2 class="section-title elegant-title">Con la bendición de nuestros padres</h2>
-            <div class="divider"></div>
-            
+            <h2 class="section-title elegant-title" style="color: var(--primary-color);">Con la bendición de nuestros padres</h2>
+            <div class="divider" style="background: var(--primary-color);"></div>
+
             <div class="row g-5 mt-3" style="max-width: 900px; margin: 0 auto;">
                 <div class="col-md-6">
                     <div style="text-align: center; padding: 2rem;">
                         <i class="fas fa-crown" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
-                        <h3 class="serif-text" style="font-size: 1.8rem; color: var(--secondary-color); margin-bottom: 1.5rem;">Novia</h3>
-                        <p style="font-size: 1.1rem; color: #666; line-height: 1.8;">
+                        <h3 class="serif-text" style="font-size: 1.8rem; color: #fff; margin-bottom: 1.5rem;">Novia</h3>
+                        <p style="font-size: 1.1rem; color: rgba(255,255,255,0.85); line-height: 1.8;">
                             Sra. Wendy María Tzab Hernández<br>
                             Sr. Jose Luis Enrique Valle Pech
                         </p>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6">
                     <div style="text-align: center; padding: 2rem;">
                         <i class="fas fa-user-tie" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
-                        <h3 class="serif-text" style="font-size: 1.8rem; color: var(--secondary-color); margin-bottom: 1.5rem;">Novio</h3>
-                        <p style="font-size: 1.1rem; color: #666; line-height: 1.8;">
+                        <h3 class="serif-text" style="font-size: 1.8rem; color: #fff; margin-bottom: 1.5rem;">Novio</h3>
+                        <p style="font-size: 1.1rem; color: rgba(255,255,255,0.85); line-height: 1.8;">
                             Sra. Macaria Hidalgo Hernández<br>
                             Sr. Francisco Montalvo Cano
                         </p>
@@ -1144,7 +1150,7 @@
                             <div class="location-details">
                                 <h3 class="serif-text">Ceremonia Religiosa</h3>
                                 <p>Te esperamos para celebrar este día especial</p>
-                                <a href="https://maps.app.goo.gl/2LXdSp42muNh5MCEA?g_st=iw" 
+                                <a href="https://maps.app.goo.gl/zDnsRy74d5GqrdEF8" 
                                    target="_blank" 
                                    rel="noopener noreferrer"
                                    class="map-btn">
