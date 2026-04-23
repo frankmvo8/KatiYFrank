@@ -1314,8 +1314,8 @@
             // Si hay nombre, personalizar el saludo
             if (name) {
                 const greeting = document.getElementById('greeting');
-                greeting.textContent = `Estimado/a ${decodeURIComponent(name)}`;
-                
+                greeting.textContent = decodeURIComponent(name);
+
                 // Actualizar el título de la página
                 document.title = `Invitación - ${decodeURIComponent(name)}`;
             }
