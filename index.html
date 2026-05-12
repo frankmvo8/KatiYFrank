@@ -35,6 +35,413 @@
             overflow-x: hidden;
         }
 
+        body.cover-open {
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* ===== Envelope Cover ===== */
+        .envelope-cover {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background:
+                radial-gradient(circle at 50% 30%, rgba(201,150,43,0.18), transparent 60%),
+                linear-gradient(135deg, #0f1a30 0%, #1a2744 50%, #243558 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            perspective: 1800px;
+            transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        visibility 0s linear 1.4s;
+        }
+
+        .envelope-cover.opened {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .envelope-cover.opened .envelope {
+            transform: translateY(-30px) scale(1.05);
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Decorative shimmer particles */
+        .envelope-cover::before,
+        .envelope-cover::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,150,43,0.35), transparent 70%);
+            filter: blur(40px);
+            animation: floatGlow 8s ease-in-out infinite;
+        }
+
+        .envelope-cover::before {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+        }
+
+        .envelope-cover::after {
+            width: 400px;
+            height: 400px;
+            bottom: 5%;
+            right: 5%;
+            animation-delay: 2s;
+        }
+
+        @keyframes floatGlow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -30px) scale(1.15); }
+        }
+
+        .envelope {
+            position: relative;
+            width: min(90vw, 480px);
+            height: min(60vh, 320px);
+            transform-style: preserve-3d;
+            animation: envelopeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+            will-change: transform;
+        }
+
+        @keyframes envelopeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .envelope-body {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, #f5ebd6 0%, #ead7a8 50%, #d9c184 100%);
+            border-radius: 6px;
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.5),
+                inset 0 0 60px rgba(201,150,43,0.15);
+            overflow: hidden;
+        }
+
+        /* Ornate border inside the envelope front */
+        .envelope-body::before {
+            content: '';
+            position: absolute;
+            inset: 18px;
+            border: 1px solid rgba(26, 39, 68, 0.35);
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .envelope-body::after {
+            content: '';
+            position: absolute;
+            inset: 24px;
+            border: 1px solid rgba(26, 39, 68, 0.2);
+            border-radius: 3px;
+            pointer-events: none;
+        }
+
+        .envelope-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        .envelope-monogram {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--secondary-color);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+
+        .envelope-names {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .envelope-divider {
+            width: 60px;
+            height: 1px;
+            background: var(--secondary-color);
+            margin: 0.6rem auto;
+            position: relative;
+        }
+
+        .envelope-divider::before,
+        .envelope-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 6px;
+            height: 6px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+
+        .envelope-divider::before { left: -14px; }
+        .envelope-divider::after { right: -14px; }
+
+        .envelope-tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: rgba(26, 39, 68, 0.75);
+            letter-spacing: 1px;
+        }
+
+        /* Envelope flap (triangle on top) */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 55%;
+            background: linear-gradient(160deg, #ead7a8 0%, #c9a96a 100%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transform: rotateX(0deg);
+            transition: transform 1.4s cubic-bezier(0.65, 0, 0.35, 1);
+            z-index: 3;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+
+        .envelope-flap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.08), transparent 40%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+
+        .envelope.opening .envelope-flap {
+            transform: rotateX(180deg);
+            transition-delay: 0.35s;
+        }
+
+        /* Wax seal on flap */
+        .wax-seal {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 35% 30%, #d9b25a, #b8862a 40%, #7c5a18 100%);
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.4),
+                inset 0 -8px 15px rgba(0, 0, 0, 0.3),
+                inset 0 8px 15px rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 5;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            animation: sealPulse 2.4s ease-in-out infinite;
+        }
+
+        .wax-seal:hover {
+            transform: translate(-50%, -50%) scale(1.08);
+            box-shadow:
+                0 12px 28px rgba(0, 0, 0, 0.5),
+                inset 0 -8px 15px rgba(0, 0, 0, 0.3),
+                inset 0 8px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes sealPulse {
+            0%, 100% { box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 -8px 15px rgba(0,0,0,0.3), inset 0 8px 15px rgba(255,255,255,0.25), 0 0 0 0 rgba(201,150,43,0.5); }
+            50%      { box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 -8px 15px rgba(0,0,0,0.3), inset 0 8px 15px rgba(255,255,255,0.25), 0 0 0 18px rgba(201,150,43,0); }
+        }
+
+        .wax-seal-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.6rem;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            line-height: 1;
+            user-select: none;
+        }
+
+        .envelope.opening .wax-seal {
+            animation: sealBreak 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+            animation-delay: 0.05s;
+        }
+
+        @keyframes sealBreak {
+            0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            30%  { transform: translate(-50%, -50%) scale(1.18) rotate(-3deg); }
+            60%  { transform: translate(-50%, -50%) scale(0.95) rotate(2deg); opacity: 0.8; }
+            100% {
+                transform: translate(-50%, -50%) scale(0.5) rotate(-5deg);
+                opacity: 0;
+            }
+        }
+
+        /* Letter that emerges from envelope */
+        .envelope-letter {
+            position: absolute;
+            inset: 5% 8%;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            transform: translateY(0);
+            transition: transform 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.85s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            will-change: transform;
+        }
+
+        .envelope.opening .envelope-letter {
+            transform: translateY(-85%);
+        }
+
+        .letter-inner {
+            text-align: center;
+            color: var(--secondary-color);
+        }
+
+        .letter-inner .ampersand {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+
+        .letter-inner h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin: 0.4rem 0;
+        }
+
+        .letter-inner .date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            opacity: 0.8;
+        }
+
+        /* Open prompt below envelope */
+        .open-prompt {
+            position: absolute;
+            bottom: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.85);
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            text-align: center;
+            animation: bounce 2s ease-in-out infinite;
+            transition: opacity 0.5s ease;
+        }
+
+        .envelope-cover.opening .open-prompt {
+            opacity: 0;
+        }
+
+        .open-prompt small {
+            display: block;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+            color: var(--primary-color);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50%      { transform: translate(-50%, -10px); }
+        }
+
+        .envelope.opening ~ .open-prompt,
+        .envelope-cover.opened .open-prompt {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* ===== Language Switch ===== */
+        .lang-switch {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 10000;
+            display: flex;
+            background: rgba(26, 39, 68, 0.92);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201, 150, 43, 0.55);
+            border-radius: 50px;
+            padding: 4px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .lang-switch button {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-switch button.active {
+            background: var(--primary-color);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(201, 150, 43, 0.4);
+        }
+
+        .lang-switch button:hover:not(.active) {
+            color: #fff;
+        }
+
+        @media (max-width: 480px) {
+            .lang-switch { top: 12px; right: 12px; padding: 3px; }
+            .lang-switch button { padding: 5px 11px; font-size: 0.72rem; letter-spacing: 1px; }
+            .envelope-monogram { font-size: 2.6rem; }
+            .envelope-names { font-size: 1rem; letter-spacing: 4px; }
+            .envelope-tagline { font-size: 0.8rem; }
+            .wax-seal { width: 75px; height: 75px; }
+            .wax-seal-text { font-size: 2rem; }
+            .letter-inner .ampersand { font-size: 3rem; }
+            .letter-inner h3 { font-size: 0.9rem; letter-spacing: 3px; }
+            .open-prompt { font-size: 0.95rem; }
+        }
+
         .elegant-title {
             font-family: 'Great Vibes', cursive;
             color: var(--primary-color);
@@ -859,19 +1266,56 @@
         }
     </style>
 </head>
-<body>
+<body class="cover-open">
+
+    <!-- Language Switch -->
+    <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" id="langEs" class="active" data-lang="es">ES</button>
+        <button type="button" id="langEn" data-lang="en">EN</button>
+    </div>
+
+    <!-- Envelope Cover -->
+    <div class="envelope-cover" id="envelopeCover">
+        <div class="envelope" id="envelope">
+            <div class="envelope-body">
+                <div class="envelope-content">
+                    <div class="envelope-monogram">K &amp; F</div>
+                    <div class="envelope-names">Katia &amp; Frank</div>
+                    <div class="envelope-divider"></div>
+                    <div class="envelope-tagline" data-en="Our Wedding">Nuestra Boda</div>
+                    <div class="envelope-tagline" data-en="08 &middot; 01 &middot; 2026" style="margin-top: 0.4rem; font-size: 0.85rem; letter-spacing: 2px;">01 &middot; AGOSTO &middot; 2026</div>
+                </div>
+            </div>
+            <div class="envelope-letter">
+                <div class="letter-inner">
+                    <div class="ampersand">&amp;</div>
+                    <h3>Katia &amp; Frank</h3>
+                    <div class="date">01 &middot; 08 &middot; 2026</div>
+                </div>
+            </div>
+            <div class="envelope-flap">
+                <div class="wax-seal" id="waxSeal" role="button" aria-label="Abrir invitación">
+                    <span class="wax-seal-text">K&amp;F</span>
+                </div>
+            </div>
+        </div>
+        <div class="open-prompt">
+            <span data-en="Tap the seal to open">Toca el sello para abrir</span>
+            <small><span data-en="&#x25BC; Invitation &#x25BC;">&#x25BC; Invitación &#x25BC;</span></small>
+        </div>
+    </div>
 
     <!-- Hero Banner -->
     <section class="hero-banner">
         <div class="hero-content">
-            <h1 class="elegant-title">Nos Casamos</h1>
+            <h1 class="elegant-title" data-en="We're Getting Married">Nos Casamos</h1>
             <img src="images/ELEGIDO-MONOGRAMA.jpg" alt="Monograma" class="hero-logo">
-            <p class="subtitle serif-text">TE INVITAMOS A CELEBRAR NUESTRO AMOR</p>
+            <p class="subtitle serif-text" data-en="WE INVITE YOU TO CELEBRATE OUR LOVE">TE INVITAMOS A CELEBRAR NUESTRO AMOR</p>
             <div class="divider" style="background: white;"></div>
-            <div class="date-highlight serif-text">
+            <div class="date-highlight serif-text" data-en="AUGUST • 01 • 2026">
                 01 • AGOSTO • 2026
             </div>
-            <p style="font-size: 1.1rem; font-style: italic; margin-top: 2rem; opacity: 0.9;">"El amor es paciente, es bondadoso. El amor todo lo disculpa, todo lo cree, todo lo espera, todo lo soporta"</p>
+            <p style="font-size: 1.1rem; font-style: italic; margin-top: 2rem; opacity: 0.9;" data-en="&quot;Love is patient, love is kind. Love bears all things, believes all things, hopes all things, endures all things.&quot;">"El amor es paciente, es bondadoso. El amor todo lo disculpa, todo lo cree, todo lo espera, todo lo soporta"</p>
         </div>
     </section>
 
@@ -910,13 +1354,13 @@
         <div class="container">
             <div class="welcome-content">
                 <i class="fas fa-heart welcome-icon"></i>
-                <h2 class="section-title elegant-title" id="greeting">Un Momento Especial</h2>
+                <h2 class="section-title elegant-title" id="greeting" data-en="A Special Moment">Un Momento Especial</h2>
                 <p id="guestInfo" style="font-size: 1.3rem; color: var(--primary-color); margin-bottom: 1.5rem; font-weight: 500;"></p>
                 <div class="divider"></div>
-                <p class="welcome-text">
-                    Hoy comenzamos a escribir una nueva historia juntos, y no hay nada que nos haga más felices 
-                    que poder compartir este momento tan especial con las personas que más amamos. 
-                    Tu presencia es el mejor regalo que podemos recibir, y queremos que seas parte de este día único 
+                <p class="welcome-text" data-en="Today we begin to write a new story together, and nothing could make us happier than sharing this special moment with the people we love most. Your presence is the best gift we could receive, and we want you to be part of this unique day when we will unite our lives in marriage. Thank you for joining us in this dream come true.">
+                    Hoy comenzamos a escribir una nueva historia juntos, y no hay nada que nos haga más felices
+                    que poder compartir este momento tan especial con las personas que más amamos.
+                    Tu presencia es el mejor regalo que podemos recibir, y queremos que seas parte de este día único
                     donde uniremos nuestras vidas en matrimonio. Gracias por acompañarnos en este sueño hecho realidad.
                 </p>
             </div>
@@ -926,17 +1370,17 @@
     <!-- Parents Section -->
     <section class="section" style="background: var(--secondary-color); padding: 80px 0; color: white;">
         <div class="container">
-            <h2 class="section-title elegant-title" style="color: var(--primary-color);">Con la bendición de nuestros padres</h2>
+            <h2 class="section-title elegant-title" style="color: var(--primary-color);" data-en="With our parents' blessing">Con la bendición de nuestros padres</h2>
             <div class="divider" style="background: var(--primary-color);"></div>
 
             <div class="row g-5 mt-3" style="max-width: 900px; margin: 0 auto;">
                 <div class="col-md-6">
                     <div style="text-align: center; padding: 2rem;">
                         <i class="fas fa-crown" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
-                        <h3 class="serif-text" style="font-size: 1.8rem; color: #fff; margin-bottom: 1.5rem;">Novia</h3>
+                        <h3 class="serif-text" style="font-size: 1.8rem; color: #fff; margin-bottom: 1.5rem;" data-en="Bride's Parents">Novia</h3>
                         <p style="font-size: 1.1rem; color: rgba(255,255,255,0.85); line-height: 1.8;">
-                            Sra. Wendy María Tzab Hernández<br>
-                            Sr. Jose Luis Enrique Valle Pech
+                            <span data-en="Mrs. Wendy María Tzab Hernández">Sra. Wendy María Tzab Hernández</span><br>
+                            <span data-en="Mr. Jose Luis Enrique Valle Pech">Sr. Jose Luis Enrique Valle Pech</span>
                         </p>
                     </div>
                 </div>
@@ -944,12 +1388,27 @@
                 <div class="col-md-6">
                     <div style="text-align: center; padding: 2rem;">
                         <i class="fas fa-user-tie" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
-                        <h3 class="serif-text" style="font-size: 1.8rem; color: #fff; margin-bottom: 1.5rem;">Novio</h3>
+                        <h3 class="serif-text" style="font-size: 1.8rem; color: #fff; margin-bottom: 1.5rem;" data-en="Groom's Parents">Novio</h3>
                         <p style="font-size: 1.1rem; color: rgba(255,255,255,0.85); line-height: 1.8;">
-                            Sra. Macaria Hidalgo Hernández<br>
-                            Sr. Francisco Montalvo Cano
+                            <span data-en="Mrs. Macaria Hidalgo Hernández">Sra. Macaria Hidalgo Hernández</span><br>
+                            <span data-en="Mr. Francisco Montalvo Cano">Sr. Francisco Montalvo Cano</span>
                         </p>
                     </div>
+                </div>
+            </div>
+
+            <div style="max-width: 900px; margin: 3rem auto 0; padding-top: 2.5rem; border-top: 1px solid rgba(201, 150, 43, 0.35);">
+                <h3 class="elegant-title" style="text-align: center; font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem;" data-en="Godparents">Padrinos</h3>
+                <div class="divider" style="background: var(--primary-color); margin: 1rem auto 2.5rem;"></div>
+
+                <div style="text-align: center; padding: 1rem;">
+                    <i class="fas fa-dove" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <h4 class="serif-text" style="font-size: 1.4rem; color: #fff; margin-bottom: 1rem; letter-spacing: 2px;" data-en="Wedding Sponsors">Padrinos de Velación</h4>
+                    <p style="font-size: 1.1rem; color: rgba(255,255,255,0.85); line-height: 1.8;">
+                        Maria Jesus Hernández Castro<br>
+                        <span style="color: var(--primary-color); font-family: 'Great Vibes', cursive; font-size: 1.6rem;">&amp;</span><br>
+                        José Armando Naal Lopez
+                    </p>
                 </div>
             </div>
         </div>
@@ -960,33 +1419,33 @@
         <div class="container">
             <!-- Weather Widget -->
             <div style="max-width: 400px; margin: 0 auto 3rem; background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                <h3 class="elegant-title" style="font-size: 1.8rem; text-align: center; margin-bottom: 1rem;">Clima del día</h3>
+                <h3 class="elegant-title" style="font-size: 1.8rem; text-align: center; margin-bottom: 1rem;" data-en="Weather of the day">Clima del día</h3>
                 <div id="weather-widget" style="text-align: center;">
                     <i class="fas fa-cloud-sun" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
-                    <p id="weather-info" style="font-size: 1.1rem; color: #666;">Cargando clima...</p>
+                    <p id="weather-info" style="font-size: 1.1rem; color: #666;" data-en="Loading weather...">Cargando clima...</p>
                 </div>
             </div>
 
-            <h2 class="section-title elegant-title">Cuenta Regresiva</h2>
+            <h2 class="section-title elegant-title" data-en="Countdown">Cuenta Regresiva</h2>
             <div class="divider"></div>
-            <p class="section-subtitle">Faltan para el gran día...</p>
-            
+            <p class="section-subtitle" data-en="Until the big day...">Faltan para el gran día...</p>
+
             <div class="countdown-boxes">
                 <div class="countdown-box">
                     <div class="number" id="days">0</div>
-                    <div class="label">Días</div>
+                    <div class="label" data-en="Days">Días</div>
                 </div>
                 <div class="countdown-box">
                     <div class="number" id="hours">0</div>
-                    <div class="label">Horas</div>
+                    <div class="label" data-en="Hours">Horas</div>
                 </div>
                 <div class="countdown-box">
                     <div class="number" id="minutes">0</div>
-                    <div class="label">Minutos</div>
+                    <div class="label" data-en="Minutes">Minutos</div>
                 </div>
                 <div class="countdown-box">
                     <div class="number" id="seconds">0</div>
-                    <div class="label">Segundos</div>
+                    <div class="label" data-en="Seconds">Segundos</div>
                 </div>
             </div>
         </div>
@@ -995,26 +1454,26 @@
     <!-- Calendar Section -->
     <section class="calendar-section section">
         <div class="container">
-            <h2 class="section-title elegant-title">Guarda la Fecha</h2>
+            <h2 class="section-title elegant-title" data-en="Save the Date">Guarda la Fecha</h2>
             <div class="divider"></div>
-            <p class="section-subtitle">Sábado, 1 de Agosto del 2026</p>
-            
+            <p class="section-subtitle" data-en="Saturday, August 1st, 2026">Sábado, 1 de Agosto del 2026</p>
+
             <div class="row align-items-center g-4">
                 <!-- Calendar -->
                 <div class="col-lg-6 col-md-12">
                     <div class="custom-calendar">
                         <div class="calendar-header">
-                            <h3>Agosto 2026</h3>
+                            <h3 data-en="August 2026">Agosto 2026</h3>
                         </div>
-                        
+
                         <div class="calendar-days">
-                            <div class="calendar-day-name">D</div>
-                            <div class="calendar-day-name">L</div>
-                            <div class="calendar-day-name">M</div>
-                            <div class="calendar-day-name">M</div>
-                            <div class="calendar-day-name">J</div>
-                            <div class="calendar-day-name">V</div>
-                            <div class="calendar-day-name">S</div>
+                            <div class="calendar-day-name" data-en="S">D</div>
+                            <div class="calendar-day-name" data-en="M">L</div>
+                            <div class="calendar-day-name" data-en="T">M</div>
+                            <div class="calendar-day-name" data-en="W">M</div>
+                            <div class="calendar-day-name" data-en="T">J</div>
+                            <div class="calendar-day-name" data-en="F">V</div>
+                            <div class="calendar-day-name" data-en="S">S</div>
                             
                             <!-- Empty days for alignment -->
                             <div class="calendar-day empty"></div>
@@ -1071,34 +1530,34 @@
                         <div class="event-icon">
                             <i class="fas fa-rings-wedding"></i>
                         </div>
-                        <h3 class="elegant-title" style="font-size: 2.5rem; color: var(--primary-color);">Ceremonia</h3>
+                        <h3 class="elegant-title" style="font-size: 2.5rem; color: var(--primary-color);" data-en="Ceremony">Ceremonia</h3>
                         <div class="event-info">
                             <div class="info-item">
                                 <i class="fas fa-calendar-check"></i>
                                 <div>
-                                    <h4>Fecha</h4>
-                                    <p>Sábado, 1 de Agosto 2026</p>
+                                    <h4 data-en="Date">Fecha</h4>
+                                    <p data-en="Saturday, August 1st, 2026">Sábado, 1 de Agosto 2026</p>
                                 </div>
                             </div>
                             <div class="info-item">
                                 <i class="fas fa-clock"></i>
                                 <div>
-                                    <h4>Hora</h4>
-                                    <p>20:30 hrs</p>
+                                    <h4 data-en="Time">Hora</h4>
+                                    <p data-en="8:30 PM">20:30 hrs</p>
                                 </div>
                             </div>
                             <div class="info-item">
                                 <i class="fas fa-glass-cheers"></i>
                                 <div>
-                                    <h4>Celebración</h4>
-                                    <p>Ceremonia religiosa</p>
+                                    <h4 data-en="Celebration">Celebración</h4>
+                                    <p data-en="Religious ceremony">Ceremonia religiosa</p>
                                 </div>
                             </div>
                             <div class="info-item">
                                 <i class="fas fa-church"></i>
                                 <div>
-                                    <h4>Oficiará</h4>
-                                    <p>P. Ricardo Sabido</p>
+                                    <h4 data-en="Officiated by">Oficiará</h4>
+                                    <p>Pbro. Ricardo Sabido</p>
                                 </div>
                             </div>
                         </div>
@@ -1111,34 +1570,34 @@
     <!-- Dress Code Section -->
     <section class="dress-code-section section">
         <div class="container">
-            <h2 class="section-title elegant-title">Código de Vestimenta</h2>
+            <h2 class="section-title elegant-title" data-en="Dress Code">Código de Vestimenta</h2>
             <div class="divider"></div>
-            
+
             <div class="dress-code-cards">
                 <div class="dress-card">
                     <i class="fas fa-user-tie"></i>
-                    <h3 class="serif-text">Caballeros</h3>
-                    <p>Vestimenta formal</p>
+                    <h3 class="serif-text" data-en="Gentlemen">Caballeros</h3>
+                    <p data-en="Formal attire">Vestimenta formal</p>
                 </div>
-                
+
                 <div class="dress-card">
                     <i class="fas fa-gem"></i>
-                    <h3 class="serif-text">Damas</h3>
-                    <p>Vestimenta formal</p>
-                    <p style="font-size: 0.85rem; margin-top: 1rem; color: #999; font-style: italic;">Por favor, evitar  el color rojo, beige o blanco</p>
+                    <h3 class="serif-text" data-en="Ladies">Damas</h3>
+                    <p data-en="Formal attire">Vestimenta formal</p>
+                    <p style="font-size: 0.85rem; margin-top: 1rem; color: #999; font-style: italic;" data-en="Please avoid red, beige or white">Por favor, evitar  el color rojo, beige o blanco</p>
                 </div>
             </div>
-            <p style="font-size: 0.85rem; margin-top: 2rem; color: #999; font-style: italic; text-align: center; width: 100%;">Tomar en cuenta que la boda será en un jardín</p>
+            <p style="font-size: 0.85rem; margin-top: 2rem; color: #999; font-style: italic; text-align: center; width: 100%;" data-en="Please note the wedding will be held in a garden">Tomar en cuenta que la boda será en un jardín</p>
         </div>
     </section>
 
     <!-- Location Section -->
     <section class="location-section section">
         <div class="container">
-            <h2 class="section-title elegant-title">Lugares de Celebración</h2>
+            <h2 class="section-title elegant-title" data-en="Celebration Venues">Lugares de Celebración</h2>
             <div class="divider"></div>
-            <p class="section-subtitle">Nos encantaría verte allí</p>
-            
+            <p class="section-subtitle" data-en="We would love to see you there">Nos encantaría verte allí</p>
+
             <div class="row align-items-center g-4">
                 <!-- Ceremonia -->
                 <div class="col-lg-6 col-md-12">
@@ -1148,20 +1607,20 @@
                                 <i class="fas fa-church"></i>
                             </div>
                             <div class="location-details">
-                                <h3 class="serif-text">Ceremonia Religiosa</h3>
-                                <p>Te esperamos para celebrar este día especial</p>
-                                <a href="https://maps.app.goo.gl/zDnsRy74d5GqrdEF8" 
-                                   target="_blank" 
+                                <h3 class="serif-text" data-en="Religious Ceremony">Ceremonia Religiosa</h3>
+                                <p data-en="We look forward to celebrating this special day with you">Te esperamos para celebrar este día especial</p>
+                                <a href="https://maps.app.goo.gl/zDnsRy74d5GqrdEF8"
+                                   target="_blank"
                                    rel="noopener noreferrer"
                                    class="map-btn">
                                     <i class="fas fa-map-marked-alt"></i>
-                                    Ver en el Mapa
+                                    <span data-en="View on Map">Ver en el Mapa</span>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Recepción -->
                 <div class="col-lg-6 col-md-12">
                     <div class="location-card">
@@ -1170,14 +1629,14 @@
                                 <i class="fas fa-utensils"></i>
                             </div>
                             <div class="location-details">
-                                <h3 class="serif-text">Recepción</h3>
-                                <p>Te esperamos para celebrar este día especial</p>
-                                <a href="https://maps.app.goo.gl/rnAh2eBhfuj6C2me7?g_st=iw" 
-                                   target="_blank" 
+                                <h3 class="serif-text" data-en="Reception">Recepción</h3>
+                                <p data-en="We look forward to celebrating this special day with you">Te esperamos para celebrar este día especial</p>
+                                <a href="https://maps.app.goo.gl/rnAh2eBhfuj6C2me7?g_st=iw"
+                                   target="_blank"
                                    rel="noopener noreferrer"
                                    class="map-btn">
                                     <i class="fas fa-map-marked-alt"></i>
-                                    Ver en el Mapa
+                                    <span data-en="View on Map">Ver en el Mapa</span>
                                 </a>
                             </div>
                         </div>
@@ -1190,10 +1649,10 @@
     <!-- Gift Registry Section -->
     <section class="gift-registry-section section">
         <div class="container">
-            <h2 class="section-title elegant-title">Mesa de Regalos</h2>
+            <h2 class="section-title elegant-title" data-en="Gift Registry">Mesa de Regalos</h2>
             <div class="divider"></div>
-            <p class="section-subtitle">Tu presencia es lo más importante, pero si deseas obsequiarnos algo especial</p>
-            
+            <p class="section-subtitle" data-en="Your presence is the most important thing, but if you wish to give us something special">Tu presencia es lo más importante, pero si deseas obsequiarnos algo especial</p>
+
             <div class="row align-items-center g-4">
                 <!-- Chapur -->
                 <div class="col-lg-4 col-md-12">
@@ -1201,61 +1660,61 @@
                         <img src="images/chapur.png" alt="Chapur" class="gift-logo">
                         <div class="gift-content">
                             <h3 class="serif-text">Chapur</h3>
-                            <p>Descubre nuestra selección de regalos en Chapur</p>
-                            <a href="https://www.chapur.com.mx/mesa-de-regalos/109222" 
-                               target="_blank" 
+                            <p data-en="Discover our gift selection at Chapur">Descubre nuestra selección de regalos en Chapur</p>
+                            <a href="https://www.chapur.com.mx/mesa-de-regalos/109222"
+                               target="_blank"
                                rel="noopener noreferrer"
                                class="gift-btn">
                                 <i class="fas fa-gift"></i>
-                                Ver Mesa de Regalos
+                                <span data-en="View Registry">Ver Mesa de Regalos</span>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Liverpool -->
                 <div class="col-lg-4 col-md-12">
                     <div class="gift-card">
                         <img src="images/LIVERPOOL.png" alt="Liverpool" class="gift-logo">
                         <div class="gift-content">
                             <h3 class="serif-text">Liverpool</h3>
-                            <p>Descubre nuestra selección de regalos en Liverpool</p>
-                            <a href="https://mesaderegalos.liverpool.com.mx/milistaderegalos/51932828" 
-                               target="_blank" 
+                            <p data-en="Discover our gift selection at Liverpool">Descubre nuestra selección de regalos en Liverpool</p>
+                            <a href="https://mesaderegalos.liverpool.com.mx/milistaderegalos/51932828"
+                               target="_blank"
                                rel="noopener noreferrer"
                                class="gift-btn">
                                 <i class="fas fa-gift"></i>
-                                Ver Mesa de Regalos
+                                <span data-en="View Registry">Ver Mesa de Regalos</span>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Amazon -->
                 <div class="col-lg-4 col-md-12">
                     <div class="gift-card">
                         <img src="images/amazon.png" alt="Amazon" class="gift-logo">
                         <div class="gift-content">
                             <h3 class="serif-text">Amazon</h3>
-                            <p>Descubre nuestra selección de regalos en Amazon</p>
-                            <a href="https://www.amazon.com.mx/wedding/guest-view/3FIEEWDQ2NOUX" 
-                               target="_blank" 
+                            <p data-en="Discover our gift selection at Amazon">Descubre nuestra selección de regalos en Amazon</p>
+                            <a href="https://www.amazon.com.mx/wedding/guest-view/3FIEEWDQ2NOUX"
+                               target="_blank"
                                rel="noopener noreferrer"
                                class="gift-btn">
                                 <i class="fas fa-gift"></i>
-                                Ver Mesa de Regalos
+                                <span data-en="View Registry">Ver Mesa de Regalos</span>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div style="margin-top: 4rem; max-width: 800px; margin-left: auto; margin-right: auto; padding: 2rem; background: var(--accent-color); border-radius: 15px; text-align: center;">
                 <p style="font-size: 1.1rem; color: var(--text-dark); margin-bottom: 0.5rem;">
                     <i class="fas fa-heart" style="color: var(--primary-color); margin-right: 8px;"></i>
-                    <strong>Tu presencia es el mejor regalo</strong>
+                    <strong data-en="Your presence is the best gift">Tu presencia es el mejor regalo</strong>
                 </p>
-                <p style="font-size: 1rem; color: #666; margin: 0;">
+                <p style="font-size: 1rem; color: #666; margin: 0;" data-en="If you wish to give us something extra, there will be a special place during the celebration">
                     Si deseas obsequiarnos algo adicional, habrá un lugar especial durante la celebración
                 </p>
             </div>
@@ -1265,19 +1724,19 @@
     <!-- RSVP Section -->
     <section class="rsvp-section section">
         <div class="container">
-            <h2 class="section-title elegant-title">Confirma tu Asistencia</h2>
+            <h2 class="section-title elegant-title" data-en="Confirm Your Attendance">Confirma tu Asistencia</h2>
             <div class="divider" style="background: white;"></div>
-            
+
             <div class="rsvp-content">
-                <p>Tu presencia es muy importante para nosotros.<br>Por favor confírmanos si podrás acompañarnos.</p>
-                <p style="font-size: 0.95rem; color: rgba(255, 255, 255, 0.8); margin-top: 1.5rem; font-style: italic;">✦ Celebración exclusiva para adultos ✦</p>
-                
-                <a href="https://wa.me/529991575354?text=Hola!%20Confirmo%20mi%20asistencia%20a%20su%20boda%20el%201%20de%20Agosto%202026" 
-                   target="_blank" 
+                <p data-en="Your presence is very important to us.&lt;br&gt;Please let us know if you can join us.">Tu presencia es muy importante para nosotros.<br>Por favor confírmanos si podrás acompañarnos.</p>
+                <p style="font-size: 0.95rem; color: rgba(255, 255, 255, 0.8); margin-top: 1.5rem; font-style: italic;" data-en="✦ While we appreciate your little ones, we have decided to celebrate this moment without children ✦">✦ Aunque apreciamos a sus pequeños, hemos decidido celebrar este momento sin niños ✦</p>
+
+                <a href="https://wa.me/529991575354?text=Hola!%20Confirmo%20mi%20asistencia%20a%20su%20boda%20el%201%20de%20Agosto%202026"
+                   target="_blank"
                    rel="noopener noreferrer"
-                   class="whatsapp-btn">
+                   class="whatsapp-btn" id="rsvpWhatsapp">
                     <i class="fab fa-whatsapp"></i>
-                    Confirmar por WhatsApp
+                    <span data-en="Confirm via WhatsApp">Confirmar por WhatsApp</span>
                 </a>
             </div>
         </div>
@@ -1287,10 +1746,10 @@
     <footer class="footer">
         <div class="container">
             <img src="images/ELEGIDO-MONOGRAMA.jpg" alt="Monograma" class="monogram">
-            <h3 class="elegant-title">Nos vemos pronto</h3>
-            <p class="serif-text">Con amor, esperamos celebrar este día especial contigo</p>
+            <h3 class="elegant-title" data-en="See you soon">Nos vemos pronto</h3>
+            <p class="serif-text" data-en="With love, we hope to celebrate this special day with you">Con amor, esperamos celebrar este día especial contigo</p>
             <div class="divider" style="background: var(--primary-color); margin: 2rem auto 1rem;"></div>
-            <p style="font-size: 0.9rem; color: #999;">01 • Agosto • 2026</p>
+            <p style="font-size: 0.9rem; color: #999;" data-en="August • 01 • 2026">01 • Agosto • 2026</p>
         </div>
     </footer>
 
@@ -1298,6 +1757,99 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
     
     <script>
+        // === Language Switch ===
+        const i18n = {
+            titleEs: 'Nuestra Boda - Invitación',
+            titleEn: 'Our Wedding - Invitation',
+            cityEs: 'Mérida, México',
+            cityEn: 'Mérida, Mexico',
+            guestsEs: (n) => `Invitados (${n})`,
+            guestsEn: (n) => `Guests (${n})`,
+            weatherFallbackEs: 'Clima del 1 de Agosto',
+            weatherFallbackEn: 'Weather for August 1st',
+            wapEs: 'Hola! Confirmo mi asistencia a su boda el 1 de Agosto 2026',
+            wapEn: "Hi! I'm confirming my attendance to your wedding on August 1st, 2026"
+        };
+
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-en]').forEach(el => {
+                if (!el.dataset.es) el.dataset.es = el.innerHTML;
+                el.innerHTML = (lang === 'en') ? el.getAttribute('data-en') : el.dataset.es;
+            });
+
+            // Toggle active button
+            document.querySelectorAll('.lang-switch button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+
+            // Page title (only if not personalized via URL)
+            const hasNameParam = new URLSearchParams(window.location.search).get('name');
+            if (!hasNameParam) {
+                document.title = (lang === 'en') ? i18n.titleEn : i18n.titleEs;
+            }
+
+            // Guest count label
+            const guestInfo = document.getElementById('guestInfo');
+            if (guestInfo && guestInfo.dataset.count) {
+                const n = parseInt(guestInfo.dataset.count, 10);
+                guestInfo.textContent = (lang === 'en') ? i18n.guestsEn(n) : i18n.guestsEs(n);
+            }
+
+            // WhatsApp message
+            const wap = document.getElementById('rsvpWhatsapp');
+            if (wap) {
+                const msg = (lang === 'en') ? i18n.wapEn : i18n.wapEs;
+                wap.href = `https://wa.me/529991575354?text=${encodeURIComponent(msg)}`;
+            }
+
+            localStorage.setItem('invLang', lang);
+            window.__invLang = lang;
+
+            // Re-render weather in chosen language
+            if (typeof renderWeather === 'function') renderWeather();
+        }
+
+        document.querySelectorAll('.lang-switch button').forEach(btn => {
+            btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+        });
+
+        // Apply saved preference (default ES)
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('invLang') || 'es';
+            if (saved === 'en') setLanguage('en');
+            else window.__invLang = 'es';
+        });
+
+        // === Envelope opening animation ===
+        (function () {
+            const cover = document.getElementById('envelopeCover');
+            const envelope = document.getElementById('envelope');
+            const seal = document.getElementById('waxSeal');
+            if (!cover || !envelope || !seal) return;
+
+            function openEnvelope() {
+                if (envelope.classList.contains('opening')) return;
+                cover.classList.add('opening');
+                envelope.classList.add('opening');
+                setTimeout(() => {
+                    cover.classList.add('opened');
+                }, 2200);
+                setTimeout(() => {
+                    document.body.classList.remove('cover-open');
+                }, 3000);
+            }
+
+            seal.addEventListener('click', openEnvelope);
+            seal.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openEnvelope();
+                }
+            });
+            seal.setAttribute('tabindex', '0');
+        })();
+
         // Obtener parámetros de la URL
         function getUrlParams() {
             const params = new URLSearchParams(window.location.search);
@@ -1324,7 +1876,11 @@
             if (guests) {
                 const guestInfo = document.getElementById('guestInfo');
                 const numGuests = parseInt(guests);
-                guestInfo.textContent = `Invitados (${numGuests})`;
+                guestInfo.dataset.count = numGuests;
+                const lang = window.__invLang || localStorage.getItem('invLang') || 'es';
+                guestInfo.textContent = (lang === 'en')
+                    ? i18n.guestsEn(numGuests)
+                    : i18n.guestsEs(numGuests);
             }
         }
 
@@ -1332,27 +1888,49 @@
         document.addEventListener('DOMContentLoaded', personalizeInvitation);
 
         // Weather Widget
+        let weatherCache = null;
+
+        function renderWeather() {
+            const weatherInfo = document.getElementById('weather-info');
+            if (!weatherInfo) return;
+            const lang = window.__invLang || localStorage.getItem('invLang') || 'es';
+
+            if (!weatherCache) {
+                weatherInfo.textContent = (lang === 'en') ? 'Loading weather...' : 'Cargando clima...';
+                return;
+            }
+
+            if (weatherCache.error) {
+                weatherInfo.innerHTML = `<p style="color: #999;">${lang === 'en' ? i18n.weatherFallbackEn : i18n.weatherFallbackEs}</p>`;
+                return;
+            }
+
+            const { temp, descEs, descEn } = weatherCache;
+            const desc = (lang === 'en') ? descEn : descEs;
+            const city = (lang === 'en') ? i18n.cityEn : i18n.cityEs;
+            weatherInfo.innerHTML = `
+                <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color); margin-bottom: 0.5rem;">${temp}°C</div>
+                <div style="font-size: 1.1rem; color: #666;">${desc}</div>
+                <div style="font-size: 0.9rem; color: #999; margin-top: 0.5rem;">${city}</div>
+            `;
+        }
+
         async function getWeather() {
             try {
-                // Usando wttr.in para clima gratis (Mérida, México)
                 const response = await fetch('https://wttr.in/Merida,Mexico?format=j1');
                 const data = await response.json();
-                
+
                 const current = data.current_condition[0];
-                const temp = current.temp_C;
-                const desc = current.lang_es ? current.lang_es[0].value : current.weatherDesc[0].value;
-                
-                const weatherInfo = document.getElementById('weather-info');
-                weatherInfo.innerHTML = `
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color); margin-bottom: 0.5rem;">${temp}°C</div>
-                    <div style="font-size: 1.1rem; color: #666;">${desc}</div>
-                    <div style="font-size: 0.9rem; color: #999; margin-top: 0.5rem;">Mérida, México</div>
-                `;
+                weatherCache = {
+                    temp: current.temp_C,
+                    descEs: current.lang_es ? current.lang_es[0].value : current.weatherDesc[0].value,
+                    descEn: current.weatherDesc[0].value
+                };
             } catch (error) {
                 console.log('No se pudo cargar el clima');
-                const weatherInfo = document.getElementById('weather-info');
-                weatherInfo.innerHTML = '<p style="color: #999;">Clima del 1 de Agosto</p>';
+                weatherCache = { error: true };
             }
+            renderWeather();
         }
 
         // Cargar clima al iniciar
